@@ -2,7 +2,6 @@ const userService = require("../services/UserService");
 const ApiResponse = require("../error/ApiResponse");
 
 class UserController {
-
     async getUserData(req, res, next) {
         try {
             const user_id = req.params.userId;
@@ -18,9 +17,7 @@ class UserController {
         try {
             const userData = req.body;
             const userId = req.params.userId;
-            console.log(userData)
-            console.log(userId)
-            await userService.updateUserData(userData, userId);
+            await userService.updateUserData(userData, userId, req.user);
 
 
             return res.json(new ApiResponse("User data updated successfully"));
@@ -41,7 +38,9 @@ class UserController {
 
     async getAllUsers(req, res, next) {
         try {
-            const users = await userService.getAllUsers();
+            const searchString = req.query.searchString;
+
+            const users = await userService.getAllUsers(searchString);
             return res.json(new ApiResponse("User received successfully", users));
         } catch (e) {
             next(e);

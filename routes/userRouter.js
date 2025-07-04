@@ -8,6 +8,8 @@ const authMiddleware = require('../middleware/authMiddleware');
 router.patch('/updateUserData/:userId', authMiddleware(['USER', 'ADMIN']), userController.updateUserData);
 
 router.get('/getUserData/:userId', authMiddleware(['USER', 'ADMIN']), userController.getUserData);
-router.get('/getAllUsers', authMiddleware(['ADMIN', 'USER']), userController.getAllUsers);
+router.get('/getAllUsers', authMiddleware(['ADMIN']), userController.getAllUsers);
+
+router.delete('/deleteUser/:userId', authMiddleware(['ADMIN']), userController.deleteUser);
 
 module.exports = router;

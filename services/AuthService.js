@@ -7,6 +7,7 @@ const userRepository = require("../repositories/UserRepository");
 const errorMessagesEnum = require("../error/ErrorMessagesEnum");
 
 const roleService = require("./RoleService");
+const sessionService = require("./SessionService");
 const jwtService = require("./helper/JwtService");
 
 const UserAuthDto = require("../dtos/user/UserAuthDto");
@@ -52,15 +53,16 @@ class AuthService {
 
         const tokens = this.generateTokenPair(userAuthDto, userRole, user);
 
-        console.log(tokens)
+        const sessionId = await sessionService.startSession(user.user_id);
 
-        return {...userAuthDto, tokens: tokens};
+        return {...userAuthDto, tokens: tokens, sessionId};
     }
 
-    async logout(accessToken) {
+    async logout(accessToken, sessionId) {
         const data = jwtService.verifyToken(accessToken);
         const user = await userRepository.getUserByFields([{access_hash: data.accessHash}]);
         if (user) {
+            await sessionService.endSession(sessionId);
             await userRepository.updateUser({access_hash: "", refresh_hash: ""}, user.user_id);
         }
     }

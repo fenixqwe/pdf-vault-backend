@@ -25,8 +25,15 @@ class UserRepository {
         return await User.update(userData, {where: {user_id: user_id}});
     }
 
-    async getAllUsers() {
-        return await User.findAll();
+    async deleteUser(user_id) {
+        return await User.destroy({where: {user_id : user_id}});
+    }
+
+    async findAllByCondition(condition, options = {}) {
+        return await User.findAll({
+            where: condition,
+            ...options
+        });
     }
 }
 

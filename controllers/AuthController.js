@@ -31,7 +31,8 @@ class AuthController {
     async logout (req, res, next) {
         try {
             const accessToken = req.headers.authorization.split(' ')[1];
-            await authService.logout(accessToken);
+            const sessionId = req.query.sessionId;
+            await authService.logout(accessToken, sessionId);
 
             return res.json(new ApiResponse("Logged out successfully"));
         } catch (e) {
