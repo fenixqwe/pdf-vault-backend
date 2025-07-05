@@ -8,6 +8,13 @@ class DocumentRepository {
     async downloadDocument(documentId) {
         return await Document.findOne({ where: { document_id: documentId } });
     }
+
+    async getAllDocuments(condition){
+        return await Document.findAll({
+            attributes: { exclude: ['content'] },
+            where: condition
+        });
+    }
 }
 
 module.exports = new DocumentRepository();

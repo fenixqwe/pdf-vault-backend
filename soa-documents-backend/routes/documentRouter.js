@@ -6,7 +6,11 @@ const documentController = require('../controllers/DocumentController');
 const authMiddleware = require('../middleware/authMiddleware');
 
 router.post('/uploadDocument', authMiddleware(['USER', 'ADMIN']), documentController.uploadDocument);
+router.post('/uploadDocumentForUser/:userId', authMiddleware(['ADMIN']), documentController.uploadDocumentForUser);
 
 router.get('/downloadDocument/:documentId', authMiddleware(['USER', 'ADMIN']), documentController.downloadDocument);
+router.get('/getAllDocuments', authMiddleware(['ADMIN']), documentController.getAllDocuments);
+router.get('/getAllUsersDocuments', authMiddleware(['USER', 'ADMIN']), documentController.getAllUserDocuments);
+router.get('/getCertainUserDocuments/:userId', authMiddleware(['ADMIN']), documentController.getCertainUserDocuments);
 
 module.exports = router;

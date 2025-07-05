@@ -41,7 +41,7 @@ class UserController {
             const searchString = req.query.searchString;
 
             const users = await userService.getAllUsers(searchString);
-            return res.json(new ApiResponse("User received successfully", users));
+            return res.json(new ApiResponse("Users received successfully", users));
         } catch (e) {
             next(e);
         }
