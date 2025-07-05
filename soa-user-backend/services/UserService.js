@@ -1,12 +1,12 @@
 const userRepository = require("../repositories/UserRepository");
 
-const sessionService = require("../services/SessionService");
-const recordExistenceService = require("../services/helper/RecordExistenceService");
+const sessionService = require("./SessionService");
+const recordExistenceService = require("./helper/RecordExistenceService");
 
 const UserRegisteredDto = require("../dtos/user/UserRegisteredDto");
 
 const errorMessagesEnum = require("../error/ErrorMessagesEnum");
-const ApiError = require("../error/ApiError");
+const { ApiError } = require('common-lib');
 
 const { Op, fn, col, where } = require('sequelize');
 const {Role} = require("../models/models");
@@ -68,6 +68,14 @@ class UserService {
             const completedSession = completedSessions.get(user.user_id) || null;
             return new UserDto(user, user.role, activeSession, completedSession);
         });
+    }
+
+    async findUserByAccessHash(accessHash) {
+        return await userRepository.findUserByAccessHash(accessHash);
+    }
+
+    async findUserByRefreshHash(refreshHash) {
+        return await userRepository.findUserByRefreshHash(refreshHash);
     }
 }
 

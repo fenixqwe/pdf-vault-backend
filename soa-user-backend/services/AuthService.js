@@ -1,14 +1,14 @@
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
 
-const ApiError = require("../error/ApiError");
+const { ApiError } = require('common-lib');
 
 const userRepository = require("../repositories/UserRepository");
 const errorMessagesEnum = require("../error/ErrorMessagesEnum");
 
 const roleService = require("./RoleService");
 const sessionService = require("./SessionService");
-const jwtService = require("./helper/JwtService");
+const {jwtService} = require("common-lib");
 
 const UserAuthDto = require("../dtos/user/UserAuthDto");
 const UserEntity = require("../entities/UserEntity");

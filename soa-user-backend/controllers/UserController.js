@@ -1,5 +1,5 @@
 const userService = require("../services/UserService");
-const ApiResponse = require("../error/ApiResponse");
+const {ApiResponse} = require("common-lib");
 
 class UserController {
     async getUserData(req, res, next) {
@@ -42,6 +42,28 @@ class UserController {
 
             const users = await userService.getAllUsers(searchString);
             return res.json(new ApiResponse("User received successfully", users));
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async findUserByAccessHash(req, res, next) {
+        try {
+            const accessHash = req.params.hash;
+
+            const user = await userService.findUserByAccessHash(accessHash);
+            return res.json(new ApiResponse("User received successfully", user));
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async findUserByRefreshHash(req, res, next) {
+        try {
+            const refreshHash = req.params.hash;
+
+            const user = await userService.findUserByRefreshHash(refreshHash);
+            return res.json(new ApiResponse("User received successfully", user));
         } catch (e) {
             next(e);
         }

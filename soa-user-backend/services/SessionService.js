@@ -1,5 +1,5 @@
 const sessionRepository = require("../repositories/SessionRepository");
-const ApiError = require("../error/ApiError");
+const { ApiError } = require('common-lib');
 const errorMessagesEnum = require("../error/ErrorMessagesEnum");
 const { Op } = require('sequelize');
 

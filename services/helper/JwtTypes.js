@@ -1,9 +1,0 @@
-const jwtType = Object.freeze({
-    ACCESS_TOKEN: 'ACCESS',
-    REFRESH_TOKEN: 'REFRESH',
-    RESET_PASSWORD: 'RESET_PASSWORD',
-    REGISTER_CONFIRMATION: 'REGISTER_CONFIRMATION',
-    CHANGE_EMAIL: 'CHANGE_EMAIL'
-});
-
-module.exports = jwtType;

@@ -1,6 +1,6 @@
 const authService = require("../services/AuthService");
 
-const ApiResponse = require("../error/ApiResponse");
+const {ApiResponse} = require("common-lib");
 
 const UserRegisterReqDto = require("../dtos/user/UserRegisterReqDto");
 const UserLoginReqDto = require("../dtos/user/UserLoginReqDto");

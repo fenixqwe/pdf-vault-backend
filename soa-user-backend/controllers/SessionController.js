@@ -1,5 +1,5 @@
 const sessionService = require("../services/SessionService");
-const ApiResponse = require("../error/ApiResponse");
+const ApiResponse = require("common-lib");
 
 class SessionController {
     async getAllSession(req, res, next) {

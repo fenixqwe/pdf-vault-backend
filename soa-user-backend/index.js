@@ -4,10 +4,8 @@ const express = require('express');
 const sequelize = require('./db');
 const cors = require('cors');
 
-const models = require('./models/models'); // ?????
-
 const router = require('./routes');
-const errorHandler = require('./middleware/errorMiddleware');
+const {ErrorMiddleware} = require('common-lib');
 
 const {Role} = require("./models/models");
 
@@ -20,7 +18,7 @@ app.use(cors({
 app.use(express.json());
 app.use('/api', router);
 
-app.use(errorHandler);
+app.use(ErrorMiddleware);
 
 const start = async () => {
     try {

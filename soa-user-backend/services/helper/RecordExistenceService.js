@@ -1,7 +1,7 @@
 const userRepository = require("../../repositories/UserRepository");
 
 const errorMessagesEnum = require("../../error/ErrorMessagesEnum");
-const ApiError = require("../../error/ApiError");
+const { ApiError } = require('common-lib');
 
 class RecordExistenceService {
     async checkUserIsExists(userId) {

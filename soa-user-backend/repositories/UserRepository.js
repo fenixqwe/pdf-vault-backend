@@ -35,6 +35,14 @@ class UserRepository {
             ...options
         });
     }
+
+    async findUserByAccessHash(hash) {
+        return await User.findOne({ where: { access_hash: hash } });
+    }
+
+    async findUserByRefreshHash(hash) {
+        return await User.findOne({ where: { refresh_hash: hash } });
+    }
 }
 
 module.exports = new UserRepository();
