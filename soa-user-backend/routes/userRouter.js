@@ -11,7 +11,7 @@ router.get('/getUserData/:userId', authMiddleware(['USER', 'ADMIN']), userContro
 router.get('/getAllUsers', authMiddleware(['ADMIN']), userController.getAllUsers);
 
 router.get('/by-access-hash/:hash', userController.findUserByAccessHash);
-router.get('/by-refresh-hash/:hash', userController.findUserByAccessHash);
+router.get('/by-refresh-hash/:hash', userController.findUserByRefreshHash);
 
 router.delete('/deleteUser/:userId', authMiddleware(['ADMIN']), userController.deleteUser);
 
