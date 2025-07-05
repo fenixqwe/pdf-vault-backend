@@ -1,0 +1,3 @@
+./soa-documents-backend/node_modules
+./soa-user-backend/node_modules
+./common-lib/node_modules
