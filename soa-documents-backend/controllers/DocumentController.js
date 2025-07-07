@@ -30,7 +30,22 @@ class DocumentController {
     async downloadDocument(req, res, next) {
         try {
             const documentId = req.params.documentId;
+            const document = await documentService.downloadDocument(documentId)
 
+            res.set({
+                'Content-Type': document.type,
+                'Content-Disposition': `attachment; filename="${document.name}"`
+            });
+
+            res.send(document.content);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async previewDocument(req, res, next) {
+        try {
+            const documentId = req.params.documentId;
             const document = await documentService.downloadDocument(documentId)
 
             res.set({

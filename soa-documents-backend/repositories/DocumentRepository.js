@@ -6,7 +6,10 @@ class DocumentRepository {
     }
 
     async downloadDocument(documentId) {
-        return await Document.findOne({ where: { document_id: documentId } });
+        return await Document.findOne({
+            attributes: ['content'],
+            where: { document_id: documentId }
+        });
     }
 
     async getAllDocuments(condition){

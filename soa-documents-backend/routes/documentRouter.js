@@ -9,6 +9,7 @@ router.post('/uploadDocument', authMiddleware(['USER', 'ADMIN']), documentContro
 router.post('/uploadDocumentForUser/:userId', authMiddleware(['ADMIN']), documentController.uploadDocumentForUser);
 
 router.get('/downloadDocument/:documentId', authMiddleware(['USER', 'ADMIN']), documentController.downloadDocument);
+router.get('/previewDocument/:documentId', authMiddleware(['USER', 'ADMIN']), documentController.previewDocument);
 router.get('/getAllDocuments', authMiddleware(['ADMIN']), documentController.getAllDocuments);
 router.get('/getAllUsersDocuments', authMiddleware(['USER', 'ADMIN']), documentController.getAllUserDocuments);
 router.get('/getCertainUserDocuments/:userId', authMiddleware(['ADMIN']), documentController.getCertainUserDocuments);

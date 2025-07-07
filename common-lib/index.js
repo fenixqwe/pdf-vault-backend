@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const ApiError = require('./error/ApiError');
 const ApiResponse = require('./error/ApiResponse');
 const ErrorMiddleware = require('./middleware/errorMiddleware');

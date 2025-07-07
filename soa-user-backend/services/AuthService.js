@@ -86,6 +86,7 @@ class AuthService {
         await userRepository.saveModel(user);
         const userAuthDto = new UserAuthDto(user);
 
+
         const tokens = this.generateTokenPair(userAuthDto, userRole, user);
 
         return {...userAuthDto, tokens: tokens};

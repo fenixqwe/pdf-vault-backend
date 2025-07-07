@@ -1,4 +1,4 @@
-const {User} = require('../models/models');
+const {User, Role} = require('../models/models');
 
 class UserRepository {
     async createUser(user) {
@@ -10,11 +10,17 @@ class UserRepository {
     }
 
     async getUserByFields(fieldsArr) {
-        return await User.findOne({where: fieldsArr});
+        return await User.findOne({
+            where: fieldsArr,
+            include: [{ model: Role }]
+        });
     }
 
     async getUserByEmail(email) {
-        return await User.findOne({where: {email}});
+        return await User.findOne({
+            where: {email},
+            include: [{ model: Role }]
+        });
     }
 
     async saveModel(model) {
