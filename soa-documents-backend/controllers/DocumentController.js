@@ -7,8 +7,8 @@ class DocumentController {
             const file = req.files.file;
             const token = req.headers.authorization.split(" ")[1];
 
-            await documentService.uploadDocument(file, token)
-            return res.json(new ApiResponse("File was uploaded successfully"));
+            const newDocument = await documentService.uploadDocument(file, token)
+            return res.json(new ApiResponse("Document was uploaded successfully", newDocument));
         } catch (e) {
             next(e);
         }
@@ -21,7 +21,7 @@ class DocumentController {
             const userId = req.params.userId;
 
             await documentService.uploadDocument(file, token, userId)
-            return res.json(new ApiResponse("File was uploaded successfully"));
+            return res.json(new ApiResponse("Document was uploaded successfully"));
         } catch (e) {
             next(e);
         }
@@ -38,6 +38,17 @@ class DocumentController {
             });
 
             res.send(document.content);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async deleteDocument(req, res, next) {
+        try {
+            const documentId = req.params.documentId;
+            await documentService.deleteDocument(documentId);
+
+            return res.json(new ApiResponse("Document was deleted successfully"));
         } catch (e) {
             next(e);
         }

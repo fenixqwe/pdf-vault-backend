@@ -14,4 +14,6 @@ router.get('/getAllDocuments', authMiddleware(['ADMIN']), documentController.get
 router.get('/getAllUsersDocuments', authMiddleware(['USER', 'ADMIN']), documentController.getAllUserDocuments);
 router.get('/getCertainUserDocuments/:userId', authMiddleware(['ADMIN']), documentController.getCertainUserDocuments);
 
+router.delete('/deleteDocument/:documentId', authMiddleware(['USER', 'ADMIN']), documentController.deleteDocument);
+
 module.exports = router;

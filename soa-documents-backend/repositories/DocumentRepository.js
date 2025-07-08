@@ -12,6 +12,10 @@ class DocumentRepository {
         });
     }
 
+    async deleteDocument(documentId) {
+        return await Document.destroy({where: { document_id: documentId }});
+    }
+
     async getAllDocuments(condition){
         return await Document.findAll({
             attributes: { exclude: ['content'] },

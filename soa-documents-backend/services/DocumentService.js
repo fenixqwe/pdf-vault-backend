@@ -15,16 +15,22 @@ class DocumentService {
         const name = decodeURIComponent(file.name);
         const type = file.mimetype || 'application/pdf';
 
-        await documentRepository.uploadDocument({
+        const newDocument = await documentRepository.uploadDocument({
             name,
             type,
             content: buffer,
             user_id: userId
-        });
+        })
+
+        return new DocumentDto(newDocument)
     }
 
     async downloadDocument(documentId) {
         return await documentRepository.downloadDocument(documentId);
+    }
+
+    async deleteDocument(documentId) {
+        return await documentRepository.deleteDocument(documentId);
     }
 
     async getAllDocuments() {
