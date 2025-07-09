@@ -6,7 +6,7 @@ const recordExistenceService = require("./helper/RecordExistenceService");
 const UserRegisteredDto = require("../dtos/user/UserRegisteredDto");
 
 const errorMessagesEnum = require("../error/ErrorMessagesEnum");
-const { ApiError } = require('common-lib');
+const { ApiError, jwtService} = require('common-lib');
 
 const { Op, fn, col, where } = require('sequelize');
 const {Role} = require("../models/models");
@@ -34,13 +34,23 @@ class UserService {
 
         if (userData.role_id && currentUser.roles !== 'ADMIN') {
             throw ApiError.forbidden('Only administrators can change user roles');
+        } else if (userData.role_id && currentUser.roles === 'ADMIN') {
+            throw ApiError.forbidden('You cannot change your own role');
         }
 
         await userRepository.updateUser(userData, user_id);
+
+        const updatedUser = await userRepository.getUserById(user_id);
+
+        return new UserRegisteredDto(updatedUser)
     }
 
-    async deleteUser(user_id) {
+    async deleteUser(user_id, token) {
         await recordExistenceService.checkUserIsExists(user_id);
+        const { userId: tokenUserId } = jwtService.verifyToken(token);
+
+        if (user_id === tokenUserId) throw ApiError.forbidden('You cannot delete yourself');
+
         await userRepository.deleteUser(user_id);
     }
 

@@ -5,6 +5,10 @@ class RoleService {
         return await roleRepository.getRoleById(role_id);
     }
 
+    async getAllRoles() {
+        return await roleRepository.getAllRoles();
+    }
+
     async getRoleByName(name) {
         return await roleRepository.getRoleByName(name);
     }

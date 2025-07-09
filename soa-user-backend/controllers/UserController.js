@@ -17,10 +17,10 @@ class UserController {
         try {
             const userData = req.body;
             const userId = req.params.userId;
-            await userService.updateUserData(userData, userId, req.user);
+            const updatedUser = await userService.updateUserData(userData, userId, req.user);
 
 
-            return res.json(new ApiResponse("User data updated successfully"));
+            return res.json(new ApiResponse("User data updated successfully", updatedUser));
         } catch (e) {
             next(e);
         }
@@ -29,7 +29,9 @@ class UserController {
     async deleteUser(req, res, next) {
         try {
             const userId = req.params.userId;
-            await userService.deleteUser(userId);
+            const token = req.headers.authorization.split(" ")[1];
+
+            await userService.deleteUser(userId, token);
             return res.json(new ApiResponse("User deleted successfully"));
         } catch (e) {
             next(e);
