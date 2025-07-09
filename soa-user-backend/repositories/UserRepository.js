@@ -6,7 +6,10 @@ class UserRepository {
     }
 
     async getUserById(user_id) {
-        return await User.findOne({where: {user_id: user_id}});
+        return await User.findOne({
+            where: {user_id: user_id},
+            include: [{ model: Role }]
+        });
     }
 
     async getUserByFields(fieldsArr) {

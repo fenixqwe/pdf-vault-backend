@@ -29,7 +29,9 @@ class AuthService {
         userEntity.role_id = userRole.role_id;
         const user = await userRepository.createUser(userEntity);
 
-        const userAuthDto = new UserAuthDto(user);
+        const createdUser = await userRepository.getUserById(user.user_id);
+
+        const userAuthDto = new UserAuthDto(createdUser);
 
         return {...userAuthDto};
     }
