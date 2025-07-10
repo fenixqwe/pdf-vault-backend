@@ -1,6 +1,13 @@
 const {Document} = require("../models/models");
 
 class DocumentRepository {
+    async getDocument(documentId) {
+        return await Document.findOne({
+            where: { document_id: documentId },
+            attributes: { exclude: ['content'] }
+        });
+    }
+
     async uploadDocument(documentData) {
         return Document.create(documentData);
     }

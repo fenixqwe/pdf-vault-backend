@@ -3,8 +3,6 @@ const userRepository = require("../repositories/UserRepository");
 const sessionService = require("./SessionService");
 const recordExistenceService = require("./helper/RecordExistenceService");
 
-const UserRegisteredDto = require("../dtos/user/UserRegisteredDto");
-
 const errorMessagesEnum = require("../error/ErrorMessagesEnum");
 const { ApiError, jwtService} = require('common-lib');
 
@@ -16,7 +14,15 @@ class UserService {
     async getUserData(user_id) {
         await recordExistenceService.checkUserIsExists(user_id);
         const user = await userRepository.getUserById(user_id);
-        return new UserRegisteredDto(user);
+        const [activeSessions, completedSessions] = await Promise.all([
+            sessionService.getLatestSessions(user_id),
+            sessionService.getLatestSessions(user_id, true)
+        ]);
+
+        const activeSession = activeSessions.get(user_id) || null;
+        const completedSession = completedSessions.get(user_id) || null;
+
+        return new UserDto(user, user.role, activeSession || null, completedSession || null);
     }
 
     async updateUserData(userData, user_id, currentUser) {
@@ -40,9 +46,7 @@ class UserService {
 
         await userRepository.updateUser(userData, user_id);
 
-        const updatedUser = await userRepository.getUserById(user_id);
-
-        return new UserRegisteredDto(updatedUser)
+        return await this.getUserData(user_id)
     }
 
     async deleteUser(user_id, token) {

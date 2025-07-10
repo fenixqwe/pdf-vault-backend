@@ -20,8 +20,8 @@ class DocumentController {
             const token = req.headers.authorization.split(" ")[1];
             const userId = req.params.userId;
 
-            await documentService.uploadDocument(file, token, userId)
-            return res.json(new ApiResponse("Document was uploaded successfully"));
+            const newDocument = await documentService.uploadDocument(file, token, userId)
+            return res.json(new ApiResponse("Document was uploaded successfully", newDocument));
         } catch (e) {
             next(e);
         }
