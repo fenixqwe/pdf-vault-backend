@@ -1,14 +1,10 @@
 const createAuthMiddleware = require("common-lib/middleware/authMiddleware");
 
-const {User} = require("../models/models");
+const userController = require("../controllers/userController");
 
 const authMiddleware = createAuthMiddleware({
-    findUserByAccessHash: async (hash) => {
-        return await User.findOne({ where: { access_hash: hash } }); // ???
-    },
-    findUserByRefreshHash: async (hash) => {
-        return await User.findOne({ where: { refresh_hash: hash } }); // ????
-    }
+    findUserByAccessHash: userController.findUserByAccessHash,
+    findUserByRefreshHash: userController.findUserByRefreshHash
 });
 
 module.exports = authMiddleware;
