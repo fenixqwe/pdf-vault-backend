@@ -1,10 +1,10 @@
 const createAuthMiddleware = require("common-lib/middleware/authMiddleware");
 
-const userController = require("../controllers/userController");
+const userService = require("../services/UserService");
 
 const authMiddleware = createAuthMiddleware({
-    findUserByAccessHash: userController.findUserByAccessHash,
-    findUserByRefreshHash: userController.findUserByRefreshHash
+    findUserByAccessHash: userService.findUserByAccessHash,
+    findUserByRefreshHash: userService.findUserByRefreshHash
 });
 
 module.exports = authMiddleware;
