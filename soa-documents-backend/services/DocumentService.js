@@ -1,6 +1,7 @@
-const {jwtService} = require('common-lib');
-
 const documentRepository = require('../repositories/DocumentRepository');
+
+const {jwtService} = require('common-lib');
+const recordExistenceService = require("./helper/RecordExistenceService");
 
 const DocumentDto = require('../dtos/document/DocumentDto');
 const {Op, where, col, fn} = require("sequelize");
@@ -26,10 +27,14 @@ class DocumentService {
     }
 
     async downloadDocument(documentId) {
+        await recordExistenceService.checkDocIsExists(documentId);
+
         return await documentRepository.downloadDocument(documentId);
     }
 
     async deleteDocument(documentId) {
+        await recordExistenceService.checkDocIsExists(documentId);
+
         return await documentRepository.deleteDocument(documentId);
     }
 

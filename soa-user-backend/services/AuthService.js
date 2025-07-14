@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
 
-const { ApiError } = require('common-lib');
+const { ApiError, jwtTypes} = require('common-lib');
 
 const userRepository = require("../repositories/UserRepository");
 const errorMessagesEnum = require("../error/ErrorMessagesEnum");
@@ -13,6 +13,7 @@ const {jwtService} = require("common-lib");
 const UserAuthDto = require("../dtos/user/UserAuthDto");
 const UserEntity = require("../entities/UserEntity");
 const TokenPairDto = require("../dtos/jwt/TokenPairDto");
+const mailService = require("./helper/MailService");
 
 class AuthService {
     async registration(userData) {
@@ -92,6 +93,43 @@ class AuthService {
         const tokens = this.generateTokenPair(userAuthDto, userRole, user);
 
         return {...userAuthDto, tokens: tokens};
+    }
+
+    async requestResetPassword(email) {
+        const user = await userRepository.getUserByEmail(email);
+        if (!user) throw ApiError.badRequest(errorMessagesEnum.USER_NOT_REGISTERED);
+
+        const RESET_PASSWORD_TOKEN_EXPIRE_TIME = "3m";
+        const resetToken = jwtService.generateToken({
+                userId: user.user_id,
+                type: jwtTypes.RESET_PASSWORD
+            },
+            RESET_PASSWORD_TOKEN_EXPIRE_TIME
+        );
+        const resetLink = `${process.env.CLIENT_URL}/resetPassword/newPassword?token=${resetToken}`;
+        const mailOptions = {
+            to: email,
+            subject: "Reset password request of PDF Vault",
+            text: "",
+            template: `../../utils/emailTemplates/resetPasswordConfirmation.handlebars`,
+            payload: {name: user.name, link: resetLink},
+        };
+
+        await mailService.sendToMail(mailOptions);
+    }
+
+    async resetPassword(userResetPasswordReqDto) {
+        const {token, new_password} = userResetPasswordReqDto;
+
+        const tokenData = jwtService.verifyToken(token);
+        if (!tokenData) {
+            throw ApiError.badRequest(errorMessagesEnum.USER_INVALID_RESET_PASSWORD_LINK);
+        }
+        if (tokenData.type !== jwtTypes.RESET_PASSWORD) {
+            throw ApiError.badRequest(errorMessagesEnum.USER_INVALID_RESET_PASSWORD_LINK);
+        }
+        const hashNewPassword = await bcrypt.hash(new_password, 5);
+        await userRepository.updateUser({password: hashNewPassword}, tokenData.userId);
     }
 
     generateTokenPair(userAuthDto, role, user) {

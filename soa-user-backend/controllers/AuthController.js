@@ -4,6 +4,7 @@ const {ApiResponse} = require("common-lib");
 
 const UserRegisterReqDto = require("../dtos/user/UserRegisterReqDto");
 const UserLoginReqDto = require("../dtos/user/UserLoginReqDto");
+const UserResetPasswordReqDto = require("../dtos/user/UserResetPasswordReqDto");
 
 class AuthController {
     async registration(req, res, next) {
@@ -46,6 +47,28 @@ class AuthController {
             const newSessionTokens = await authService.refreshSession(refreshToken);
 
             return res.json(new ApiResponse("Session continued", newSessionTokens));
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async requestResetPassword(req, res, next) {
+        try {
+            const { email } = req.body;
+            await authService.requestResetPassword(email);
+
+            return res.json(new ApiResponse("Requested Successfully"));
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async resetPassword(req, res, next) {
+        try {
+            const userResetPasswordReqDto = new UserResetPasswordReqDto(req.body);
+            await authService.resetPassword(userResetPasswordReqDto);
+
+            return res.json(new ApiResponse("Password was reseted successfully"));
         } catch (e) {
             next(e);
         }
