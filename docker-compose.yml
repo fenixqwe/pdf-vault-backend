@@ -2,16 +2,20 @@ version: '3.8'
 
 services:
   oracle-db:
-    image: oracleinanutshell/oracle-xe-11g
+    image: gvenzl/oracle-xe:latest
     container_name: oracle-db
+    environment:
+      - ORACLE_PASSWORD=12345
     ports:
       - "1521:1521"
-    environment:
-      ORACLE_ALLOW_REMOTE: "true"
-      ORACLE_DISABLE_ASYNCH_IO: "true"
     volumes:
-      - oracle_data:/u01/app/oracle
+      - ./oracle-data:/opt/oracle/oradata
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 volumes:
   oracle_data:
