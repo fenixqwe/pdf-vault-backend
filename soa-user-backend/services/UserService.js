@@ -25,9 +25,11 @@ class UserService {
         return new UserDto(user, user.role, activeSession || null, completedSession || null);
     }
 
-    async updateUserData(userData, user_id, currentUser) {
+    async updateUserData(userData, user_id, currentUser, token) {
         await recordExistenceService.checkUserIsExists(user_id);
         const user = await userRepository.getUserById(user_id);
+
+        const { userId: tokenUserId } = jwtService.verifyToken(token);
 
         if (currentUser.roles !== 'ADMIN' && currentUser.userId !== user_id) {
             throw ApiError.forbidden('You can update only your own data');
@@ -40,7 +42,7 @@ class UserService {
 
         if (userData.role_id && currentUser.roles !== 'ADMIN') {
             throw ApiError.forbidden('Only administrators can change user roles');
-        } else if (userData.role_id && currentUser.roles === 'ADMIN') {
+        } else if (tokenUserId === user_id && userData.role_id && currentUser.roles === 'ADMIN') {
             throw ApiError.forbidden('You cannot change your own role');
         }
 

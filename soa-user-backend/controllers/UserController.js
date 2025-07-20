@@ -17,7 +17,8 @@ class UserController {
         try {
             const userData = req.body;
             const userId = req.params.userId;
-            const updatedUser = await userService.updateUserData(userData, userId, req.user);
+            const token = req.headers.authorization.split(" ")[1];
+            const updatedUser = await userService.updateUserData(userData, userId, req.user, token);
 
             return res.json(new ApiResponse("User data updated successfully", updatedUser));
         } catch (e) {
